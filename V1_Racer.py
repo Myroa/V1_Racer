@@ -139,10 +139,6 @@ def K1_V1_map():
         if keys[pygame.K_ESCAPE]:
             main_menu()
 
-        # Drifting mechanic
-        if keys[pygame.K_SPACE]:
-            car_speed *= DRIFT_MULTIPLIER
-            car_angle += car_speed * DRIFT_TURN_SPEED
         # Acceleration and friction
         if keys[pygame.K_w]:
             car_speed += ACCELERATION
@@ -156,30 +152,12 @@ def K1_V1_map():
         if keys[pygame.K_a]:
             car_angle += TURN_SPEED
         if keys[pygame.K_d]:
-            car_angle -= TURN_SPEED      
-        
-        # Calculate the direction of the front and rear wheels
-        front_wheel_x = car_x + CAR_LENGTH / 2 * math.cos(math.radians(car_angle))
-        front_wheel_y = car_y - CAR_LENGTH / 2 * math.sin(math.radians(car_angle))
-
-        rear_wheel_x = car_x - CAR_LENGTH / 2 * math.cos(math.radians(car_angle))
-        rear_wheel_y = car_y + CAR_LENGTH / 2 * math.sin(math.radians(car_angle))
+            car_angle -= TURN_SPEED
 
         # Update car position
         car_x += car_speed * math.cos(math.radians(car_angle))
         car_y -= car_speed * math.sin(math.radians(car_angle))
 
-        # Apply lateral sliding during drifting
-        if keys[pygame.K_SPACE]:
-            slide_direction = -1 if keys[pygame.K_a] else 1
-            car_x += slide_direction * car_speed * DRIFT_SLIDE_FACTOR * math.sin(math.radians(car_angle))
-            car_y += slide_direction * car_speed * DRIFT_SLIDE_FACTOR * math.cos(math.radians(car_angle))
-
-        # Apply regular friction if not drifting
-        if not keys[pygame.K_SPACE]:
-            car_speed -= FRICTION if car_speed > 0 else -FRICTION
-            car_speed = max(0, car_speed)
-            
         if car_x >= 2000:
             car_x = 1975
             car_speed = 0
